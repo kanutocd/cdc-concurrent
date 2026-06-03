@@ -20,7 +20,7 @@ module CDC
 
       # @return [Boolean] whether this processor instance is concurrent-safe.
       def concurrent_safe?
-        self.class.respond_to?(:concurrent_safe?) && self.class.concurrent_safe?
+        self.class.instance_variable_get(:@concurrent_safe) == true
       end
     end
 

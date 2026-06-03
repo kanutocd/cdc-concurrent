@@ -28,8 +28,9 @@ module CDC
       # @return [Array<CDC::Core::ProcessorResult>]
       def process_many(events)
         raise ShutdownError, "processor pool has been shut down" if @shutdown
-        return [].freeze if events.empty?
+        return empty_results if events.empty?
 
+        # @type var indexed_results: Array[[Integer, CDC::Core::ProcessorResult]]
         indexed_results = []
 
         process_batch(events, indexed_results)
@@ -49,6 +50,12 @@ module CDC
         return if processor.respond_to?(:concurrent_safe?) && processor.concurrent_safe?
 
         raise UnsafeProcessorError, "#{processor.class} must declare concurrent_safe!"
+      end
+
+      def empty_results
+        # @type var results: Array[CDC::Core::ProcessorResult]
+        results = []
+        results.freeze
       end
 
       def process_batch(events, indexed_results)

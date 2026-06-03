@@ -1,6 +1,12 @@
 module CDC
   module Concurrent
     # Immutable configuration for concurrent runtimes.
-    Configuration: untyped
+    class Configuration
+      attr_reader concurrency: Integer
+      attr_reader timeout: Float?
+      attr_reader preserve_order: bool
+
+      def initialize: (?concurrency: Integer, ?timeout: Float?, ?preserve_order: bool) -> void
+    end
   end
 end

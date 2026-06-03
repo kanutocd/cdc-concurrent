@@ -1,0 +1,20 @@
+module Kernel
+  private
+
+  def Async: () { (Async::Task) -> untyped } -> Async::Task
+end
+
+module Async
+  class Task
+    def with_timeout: (untyped timeout) { () -> untyped } -> untyped
+    def wait: () -> untyped
+  end
+
+  class Semaphore
+    def initialize: (Integer limit, parent: Task) -> void
+    def async: () { (Task) -> untyped } -> Task
+  end
+
+  class TimeoutError < StandardError
+  end
+end

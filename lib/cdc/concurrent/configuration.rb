@@ -3,7 +3,9 @@
 module CDC
   module Concurrent
     # Immutable configuration for concurrent runtimes.
-    Configuration = Data.define(:concurrency, :timeout, :preserve_order) do
+    class Configuration
+      attr_reader :concurrency, :timeout, :preserve_order
+
       # @param concurrency [Integer] maximum concurrent tasks.
       # @param timeout [Float, nil] optional timeout.
       # @param preserve_order [Boolean] whether batch results preserve input order.
@@ -11,7 +13,9 @@ module CDC
         raise ArgumentError, "concurrency must be an Integer" unless concurrency.is_a?(Integer)
         raise ArgumentError, "concurrency must be greater than zero" unless concurrency.positive?
 
-        super
+        @concurrency = concurrency
+        @timeout = timeout
+        @preserve_order = preserve_order
         freeze
       end
     end

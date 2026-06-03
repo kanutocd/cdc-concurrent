@@ -29,6 +29,8 @@ module CDC
 
       def validate_processor!: (untyped processor) -> (nil | untyped)
 
+      def empty_results: () -> ::Array[untyped]
+
       def process_batch: (untyped events, untyped indexed_results) -> untyped
 
       def process_one: (untyped event) -> untyped
