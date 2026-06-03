@@ -1,0 +1,21 @@
+module CDC
+  module Concurrent
+    # Processes TransactionEnvelope events as a single ordering-preserving unit.
+    class TransactionPool
+      @processor_pool: untyped
+
+      # @param processor [CDC::Core::Processor]
+      # @param concurrency [Integer]
+      # @param timeout [Float, nil]
+      # @param preserve_order [Boolean]
+      def initialize: (processor: untyped, ?concurrency: ::Integer, ?timeout: untyped?, ?preserve_order: bool) -> void
+
+      # @param transaction [CDC::Core::TransactionEnvelope]
+      # @return [CDC::Core::ProcessorResult]
+      def process: (untyped transaction) -> untyped
+
+      # @return [void]
+      def shutdown: () -> untyped
+    end
+  end
+end

@@ -1,0 +1,18 @@
+module CDC
+  module Concurrent
+    # Routes CDC work items to the correct concurrent pool.
+    class Router
+      @processor_pool: untyped
+
+      @transaction_pool: untyped
+
+      # @param processor_pool [ProcessorPool]
+      # @param transaction_pool [TransactionPool]
+      def initialize: (processor_pool: untyped, transaction_pool: untyped) -> void
+
+      # @param item [Object]
+      # @return [Object]
+      def process: (untyped item) -> untyped
+    end
+  end
+end

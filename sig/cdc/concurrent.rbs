@@ -1,0 +1,5 @@
+module CDC
+  # Optional concurrent runtime adapter for cdc-core processors.
+  module Concurrent
+  end
+end

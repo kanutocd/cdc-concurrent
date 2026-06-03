@@ -1,0 +1,26 @@
+module CDC
+  # Optional concurrent runtime adapter for cdc-core processors.
+  module Concurrent
+    # Adds concurrent-safe declarations to CDC::Core::Processor subclasses.
+    module ProcessorExtensions
+      # Class methods added to CDC::Core::Processor.
+      module ClassMethods
+        @concurrent_safe: untyped
+
+        # Declare this processor safe for concurrent execution.
+        def concurrent_safe!: () -> untyped
+
+        # @return [Boolean] whether instances are concurrent-safe.
+        def concurrent_safe?: () -> untyped
+      end
+
+      # @return [Boolean] whether this processor instance is concurrent-safe.
+      def concurrent_safe?: () -> untyped
+    end
+
+    # Installs concurrent-safe declarations on CDC::Core::Processor.
+    #
+    # @return [void]
+    def self.install_processor_extensions!: () -> untyped
+  end
+end

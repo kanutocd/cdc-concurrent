@@ -1,0 +1,35 @@
+module CDC
+  module Concurrent
+    # High-level concurrent runtime facade for cdc-core processors.
+    class Runtime
+      @processor_pool: untyped
+
+      @transaction_pool: untyped
+
+      @router: untyped
+
+      @shutdown: untyped
+
+      # @param processor [CDC::Core::Processor]
+      # @param concurrency [Integer]
+      # @param timeout [Float, nil]
+      # @param preserve_order [Boolean]
+      def initialize: (processor: untyped, ?concurrency: ::Integer, ?timeout: untyped?, ?preserve_order: bool) -> void
+
+      # @param item [Object]
+      # @return [Object]
+      def process: (untyped item) -> untyped
+
+      # @param events [Array<CDC::Core::ChangeEvent>]
+      # @return [Array<CDC::Core::ProcessorResult>]
+      def process_many: (untyped events) -> untyped
+
+      # @param transaction [CDC::Core::TransactionEnvelope]
+      # @return [CDC::Core::ProcessorResult]
+      def process_transaction: (untyped transaction) -> untyped
+
+      # @return [void]
+      def shutdown: () -> (nil | untyped)
+    end
+  end
+end

@@ -1,0 +1,6 @@
+module CDC
+  module Concurrent
+    # Immutable configuration for concurrent runtimes.
+    Configuration: untyped
+  end
+end

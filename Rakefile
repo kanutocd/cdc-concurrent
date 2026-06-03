@@ -1,12 +1,38 @@
 # frozen_string_literal: true
 
 require "bundler/gem_tasks"
-require "rspec/core/rake_task"
-
-RSpec::Core::RakeTask.new(:spec)
-
+require "minitest/test_task"
 require "rubocop/rake_task"
+require "yard"
 
-RuboCop::RakeTask.new
+Minitest::TestTask.create(:test) do |task|
+  task.libs << "test"
+  task.warning = true
+  task.test_globs = ["test/**/*_test.rb"]
+end
 
-task default: %i[spec rubocop]
+RuboCop::RakeTask.new(:rubocop) { |task| task.options = ["--parallel"] }
+
+YARD::Rake::YardocTask.new(:yard) do |task|
+  task.files = ["lib/**/*.rb"]
+  task.options = ["--protected"]
+end
+
+task default: %i[test rubocop yard]
+
+namespace :rbs do
+  desc "Remove all non-shimmed sig files"
+  task :clean do
+    sh "rm -rf ./sig/cdc_concurrent.rbs ./sig/cdc"
+  end
+
+  desc "Generate RBS signatures"
+  task :generate do
+    sh "bundle exec rbs prototype rb --out-dir=sig --base-dir=lib lib"
+  end
+
+  desc "Validate RBS signatures"
+  task :validate do
+    sh "bundle exec steep check"
+  end
+end

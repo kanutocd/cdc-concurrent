@@ -1,0 +1,14 @@
+module CDC
+  module Concurrent
+    # Normalizes values returned by concurrent workers.
+    class ResultCollector
+      # @param value [Object]
+      # @return [CDC::Core::ProcessorResult]
+      def self.normalize: (untyped value) -> untyped
+
+      # @param error [Exception]
+      # @return [CDC::Core::ProcessorResult]
+      def self.failure: (untyped error) -> untyped
+    end
+  end
+end
