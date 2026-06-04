@@ -114,6 +114,108 @@ For CPU-bound processing, use `cdc-parallel`.
 - Sink abstractions
 - Async Redis/OpenSearch integrations
 
+## Test Organization
+
+The test suite is grouped by intent so the same structure can be reused across CDC ecosystem gems.
+
+```text
+test/unit/          focused class and branch coverage
+test/integration/   component interaction and runtime integration
+test/behavior/      ecosystem contracts and guardrails
+test/performance/   opt-in smoke benchmarks
+```
+
+Run the default quality suite:
+
+```bash
+bundle exec rake test
+```
+
+Run a specific group:
+
+```bash
+bundle exec rake test:unit
+bundle exec rake test:integration
+bundle exec rake test:behavior
+bundle exec rake test:performance
+```
+
+The default `test` task runs unit, integration, and behavior tests. Performance tests are intentionally separate because they are environment-sensitive.
+
+## Benchmarking
+
+`cdc-concurrent` includes reproducible benchmarks that compare serial processor execution against the Async-backed processor pool.
+
+The benchmark focuses on three workload categories:
+
+| Workload | Purpose                                      |
+| -------- | -------------------------------------------- |
+| tiny     | Measure dispatch overhead                    |
+| io       | Measure scheduler-friendly I/O concurrency   |
+| batch    | Measure batched CDC event I/O fanout         |
+
+See [benchmark/README.md](benchmark/README.md) for the full benchmark methodology,
+configuration reference, report schema, and interpretation guidance.
+
+### Quick Start
+
+Default I/O workload:
+
+```bash
+bundle exec rake benchmark:processor_pool
+```
+
+Tiny overhead workload:
+
+```bash
+BENCHMARK_WORKLOAD=tiny \
+bundle exec rake benchmark:processor_pool
+```
+
+Batch workload:
+
+```bash
+BENCHMARK_WORKLOAD=batch \
+BENCHMARK_BATCH_SIZE=1000 \
+bundle exec rake benchmark:processor_pool
+```
+
+Concurrency sweep:
+
+```bash
+BENCHMARK_WORKLOAD=io \
+BENCHMARK_CONCURRENCY_COUNTS=1,10,50,100 \
+bundle exec rake benchmark:processor_pool
+```
+
+Credibility controls:
+
+```bash
+BENCHMARK_TRIALS=7 \
+BENCHMARK_MIN_DURATION=0.25 \
+BENCHMARK_ITERATIONS=1000 \
+bundle exec rake benchmark:processor_pool
+```
+
+### Benchmark Docker Image
+
+Build and run the reusable Docker image:
+
+```bash
+bundle exec rake benchmark:docker_build
+bundle exec rake benchmark:docker_run
+```
+
+Or run the image directly after it is published to GitHub Container Registry:
+
+```bash
+docker run --rm ghcr.io/kanutocd/cdc-concurrent-benchmark:main
+```
+
+The benchmark image is intended to follow the shared performance validation
+pattern across CDC Ecosystem gems, enabling reproducible benchmark execution
+locally, in CI, and across different development environments.
+
 ## License
 
 MIT.
