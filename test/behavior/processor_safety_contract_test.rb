@@ -14,7 +14,7 @@ class ProcessorSafetyContractTest < Minitest::Test
   end
 
   def test_concurrent_safety_is_inherited_by_instances
-    assert SafeConcurrentProcessor.new.concurrent_safe?
+    assert_predicate SafeConcurrentProcessor.new, :concurrent_safe?
   end
 
   def test_concurrent_safe_processor_can_be_processed
@@ -22,7 +22,7 @@ class ProcessorSafetyContractTest < Minitest::Test
 
     result = pool.process(change_event)
 
-    assert result.success?
+    assert_predicate result, :success?
   ensure
     pool&.shutdown
   end

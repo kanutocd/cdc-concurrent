@@ -43,7 +43,7 @@ class ProcessorPoolUnitTest < Minitest::Test
     pool = CDC::Concurrent::ProcessorPool.new(processor: FailingConcurrentProcessor.new, concurrency: 1)
     result = pool.process(change_event)
 
-    assert result.failure?
+    assert_predicate result, :failure?
     assert_instance_of RuntimeError, result.error
   ensure
     pool&.shutdown
@@ -58,7 +58,7 @@ class ProcessorPoolUnitTest < Minitest::Test
 
     result = pool.process(change_event)
 
-    assert result.failure?
+    assert_predicate result, :failure?
     assert_instance_of CDC::Concurrent::TimeoutError, result.error
   ensure
     pool&.shutdown

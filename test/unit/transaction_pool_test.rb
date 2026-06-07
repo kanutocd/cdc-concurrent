@@ -12,7 +12,7 @@ class TransactionPoolTest < Minitest::Test
 
     result = pool.process(transaction_with_tables("users", "orders"))
 
-    assert result.success?
+    assert_predicate result, :success?
     assert_equal 2, result.event.length
     assert(result.event.all?(&:success?))
   ensure
@@ -24,7 +24,7 @@ class TransactionPoolTest < Minitest::Test
 
     result = pool.process(transaction_with_tables("users", "failures", "orders"))
 
-    assert result.failure?
+    assert_predicate result, :failure?
     assert_equal 3, result.event.length
     assert_equal [false, true, false], result.event.map(&:failure?)
     assert_instance_of RuntimeError, result.error

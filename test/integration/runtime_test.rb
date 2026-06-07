@@ -12,7 +12,7 @@ class RuntimeTest < Minitest::Test
 
     result = runtime.process(change_event)
 
-    assert result.success?
+    assert_predicate result, :success?
     assert_equal "users", result.event[:table]
   ensure
     runtime&.shutdown
@@ -35,7 +35,7 @@ class RuntimeTest < Minitest::Test
 
     result = runtime.process_transaction(transaction)
 
-    assert result.success?
+    assert_predicate result, :success?
     assert_equal 1, result.event.length
   ensure
     runtime&.shutdown

@@ -21,6 +21,7 @@ class ProcessorPoolPerformanceTest < Minitest::Test
 
     elapsed = elapsed_time do
       results = pool.process_many(events)
+
       assert(results.all?(&:success?))
     end
 

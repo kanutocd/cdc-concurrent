@@ -12,7 +12,7 @@ class ProcessorPoolIntegrationTest < Minitest::Test
 
     result = pool.process(change_event)
 
-    assert result.success?
+    assert_predicate result, :success?
     assert_equal :update, result.event[:operation]
   ensure
     pool&.shutdown

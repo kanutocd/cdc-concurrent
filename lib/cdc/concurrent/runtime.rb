@@ -25,7 +25,8 @@ module CDC
 
       # Processes a supported work item through the runtime router.
       #
-      # @param item [CDC::Core::ChangeEvent, CDC::Core::TransactionEnvelope, Array<CDC::Core::ChangeEvent>] Work item to process.
+      # @param item [CDC::Core::ChangeEvent, CDC::Core::TransactionEnvelope and
+      #         Array<CDC::Core::ChangeEvent>] Work item to process.
       # @raise [ShutdownError] If the runtime has already been shut down.
       # @raise [UnsupportedWorkItemError] If the item cannot be routed by cdc-concurrent.
       # @return [CDC::Core::ProcessorResult, Array<CDC::Core::ProcessorResult>] Processing result for the supplied item.
@@ -46,7 +47,8 @@ module CDC
       # Processes a transaction envelope as one logical work item.
       #
       # @param transaction [CDC::Core::TransactionEnvelope] Transaction whose events should be processed together.
-      # @return [CDC::Core::ProcessorResult] Success result containing event results or failure result for the first failed event.
+      # @return [CDC::Core::ProcessorResult] Success result containing event results
+      #         or failure result for the first failed event.
       def process_transaction(transaction)
         process(transaction)
       end

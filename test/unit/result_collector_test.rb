@@ -12,7 +12,7 @@ class ResultCollectorTest < Minitest::Test
   def test_normalize_wraps_raw_value_as_success_event
     result = CDC::Concurrent::ResultCollector.normalize(:ok)
 
-    assert result.success?
+    assert_predicate result, :success?
     assert_equal :ok, result.event
   end
 
@@ -20,7 +20,7 @@ class ResultCollectorTest < Minitest::Test
     CDC::Core::ProcessorResult.stub(:success, ->(_value) { raise "bad result" }) do
       result = CDC::Concurrent::ResultCollector.normalize(:ok)
 
-      assert result.failure?
+      assert_predicate result, :failure?
       assert_instance_of RuntimeError, result.error
       assert_equal "bad result", result.error.message
     end
@@ -30,7 +30,7 @@ class ResultCollectorTest < Minitest::Test
     error = RuntimeError.new("boom")
     result = CDC::Concurrent::ResultCollector.failure(error)
 
-    assert result.failure?
+    assert_predicate result, :failure?
     assert_same error, result.error
   end
 end

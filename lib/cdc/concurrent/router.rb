@@ -20,7 +20,8 @@ module CDC
 
       # Dispatches a supported work item to its matching pool.
       #
-      # @param item [CDC::Core::ChangeEvent, CDC::Core::TransactionEnvelope, Array<CDC::Core::ChangeEvent>] Work item to process.
+      # @param item [CDC::Core::ChangeEvent, CDC::Core::TransactionEnvelope and
+      #   Array<CDC::Core::ChangeEvent>] Work item to process.
       # @raise [UnsupportedWorkItemError] If the item cannot be routed by cdc-concurrent.
       # @return [CDC::Core::ProcessorResult, Array<CDC::Core::ProcessorResult>] Processing result for the supplied item.
       def process(item)

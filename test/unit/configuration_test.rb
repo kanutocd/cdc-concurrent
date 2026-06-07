@@ -7,7 +7,7 @@ class ConfigurationTest < Minitest::Test
     config = CDC::Concurrent::Configuration.new(concurrency: 10, timeout: 1.0, preserve_order: false)
 
     assert_equal 10, config.concurrency
-    assert_equal 1.0, config.timeout
+    assert_in_delta(1.0, config.timeout)
     refute config.preserve_order
   end
 

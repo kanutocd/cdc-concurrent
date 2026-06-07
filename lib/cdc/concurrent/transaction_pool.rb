@@ -24,7 +24,8 @@ module CDC
       # Processes all events inside a transaction envelope.
       #
       # @param transaction [CDC::Core::TransactionEnvelope] Transaction envelope whose events should be processed.
-      # @return [CDC::Core::ProcessorResult] Success result containing event results, or failure result for the first failed event.
+      # @return [CDC::Core::ProcessorResult] Success result containing event results
+      #         or failure result for the first failed event.Z
       def process(transaction)
         results = @processor_pool.process_many(transaction.events).freeze
         failure = results.find(&:failure?)
