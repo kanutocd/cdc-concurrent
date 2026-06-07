@@ -42,6 +42,10 @@ The benchmark compares three execution modes.
 `serial` is measured once per benchmark run. `repeated_process` and
 `process_many` are measured once for each configured concurrency count.
 
+For `cdc-concurrent`, `process_many` is the primary throughput path. Repeated
+single-event `process` calls are included to expose per-dispatch overhead, but
+they do not represent the best way to overlap I/O waits.
+
 ## Configuration
 
 | Environment variable             | Default | Meaning                                      |
@@ -141,6 +145,10 @@ ratio_to_serial_median_events_per_second < 1.0  => serial faster
 Tiny workloads primarily measure dispatch overhead, so serial execution may be
 faster. I/O-bound and batched workloads are better indicators of useful
 concurrent throughput.
+
+`cdc-parallel` and `cdc-concurrent` benchmark different bottlenecks.
+`cdc-parallel` measures CPU parallelism; `cdc-concurrent` measures I/O wait
+overlap. Their speedup ratios are not directly comparable.
 
 ## Reproducibility
 

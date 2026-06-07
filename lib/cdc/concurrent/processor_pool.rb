@@ -3,11 +3,62 @@
 module CDC
   module Concurrent
     # Executes one concurrent-safe processor using Async tasks.
+    #
+    # ARCHITECTURAL NOTE
+    #
+    # cdc-concurrent implements the same fan-out / fan-in execution pattern used
+    # by cdc-parallel. The runtime differs, but the processor contract and result
+    # contract remain the same.
+    #
+    #   events
+    #      |
+    #      v
+    #   fan-out
+    #      |
+    #      +----> Async task
+    #      +----> Async task
+    #      +----> Async task
+    #      |
+    #      v
+    #   fan-in
+    #      |
+    #      v
+    #   ProcessorResult array
+    #
+    # Fan-out:
+    #
+    # * Events are dispatched into Async tasks.
+    # * Async::Semaphore bounds the number of concurrently running tasks.
+    # * Multiple events may make progress concurrently under Ruby's scheduler.
+    #
+    # Fan-in:
+    #
+    # * Tasks append indexed ProcessorResult values into a shared collection.
+    # * Results may complete out of execution order.
+    # * When preserve_order is enabled, ProcessorPool sorts by submission index so
+    #   the returned array matches the input order.
+    #
+    # Relationship to cdc-parallel:
+    #
+    # * cdc-concurrent performs fan-out using Async tasks and cooperative
+    #   concurrency.
+    # * cdc-parallel performs fan-out using pre-warmed Ractor workers and true
+    #   parallel execution.
+    # * Both runtimes preserve the same processor contract and return
+    #   CDC::Core::ProcessorResult objects.
+    #
+    # Processor authors should be able to switch runtimes without changing
+    # processor behavior when their processor satisfies the selected runtime's
+    # safety declaration.
     class ProcessorPool
-      # @param processor [CDC::Core::Processor]
-      # @param concurrency [Integer]
-      # @param timeout [Float, nil]
-      # @param preserve_order [Boolean]
+      # Builds an Async-backed processor pool.
+      #
+      # @param processor [CDC::Core::Processor] Processor instance that declares concurrent_safe!.
+      # @param concurrency [Integer] Maximum number of Async tasks allowed to run at once.
+      # @param timeout [Float, nil] Optional per-event processing timeout in seconds.
+      # @param preserve_order [Boolean] Whether process_many should return results in input order.
+      # @raise [UnsafeProcessorError] If the processor does not declare concurrent_safe!.
+      # @return [void] Does not return a useful value.
       def initialize(processor:, concurrency: 100, timeout: nil, preserve_order: true)
         validate_processor!(processor)
 
@@ -16,16 +67,25 @@ module CDC
         @shutdown = false
       end
 
-      # @param event [CDC::Core::ChangeEvent]
-      # @return [CDC::Core::ProcessorResult]
+      # Processes one event synchronously through the Async runtime.
+      #
+      # @param event [CDC::Core::ChangeEvent] Event to process.
+      # @raise [ShutdownError] If the pool has already been shut down.
+      # @return [CDC::Core::ProcessorResult] Normalized processor result.
       def process(event)
         raise ShutdownError, "processor pool has been shut down" if @shutdown
 
         process_one(event)
       end
 
-      # @param events [Array<CDC::Core::ChangeEvent>]
-      # @return [Array<CDC::Core::ProcessorResult>]
+      # Processes many events through bounded Async fan-out.
+      #
+      # When preserve_order is true, the returned array matches the order of the
+      # supplied events even if individual tasks complete out of order.
+      #
+      # @param events [Array<CDC::Core::ChangeEvent>] Events to process.
+      # @raise [ShutdownError] If the pool has already been shut down.
+      # @return [Array<CDC::Core::ProcessorResult>] Frozen array of normalized results.
       def process_many(events)
         raise ShutdownError, "processor pool has been shut down" if @shutdown
         return empty_results if events.empty?
@@ -39,7 +99,9 @@ module CDC
         indexed_results.map(&:last).freeze
       end
 
-      # @return [void]
+      # Prevents new work from being submitted to the pool.
+      #
+      # @return [void] Does not return a useful value.
       def shutdown
         @shutdown = true
       end

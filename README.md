@@ -73,6 +73,10 @@ results = runtime.process_many(events)
 
 Results preserve input order by default. Set `preserve_order: false` when completion order is acceptable.
 
+For I/O-bound throughput, `process_many` is the primary path. Repeated
+single-event `process` calls still pay one Async dispatch per event, while
+`process_many` lets the runtime overlap waits across the submitted batch.
+
 ## Transaction Processing
 
 ```ruby
@@ -99,9 +103,16 @@ CDC::Concurrent::UnsafeProcessorError
 
 A concurrent-safe processor should avoid unsafe shared mutable instance state. This runtime runs tasks concurrently in one Ruby process; it does not isolate mutable objects like Ractors do.
 
+`concurrent_safe!` is a declaration of processor intent, not a proof. The
+runtime cannot verify that a processor avoids unsafe shared mutable state or
+uses scheduler-compatible I/O.
+
 ## Important Limits
 
 `cdc-concurrent` improves throughput only for I/O that cooperates with Ruby's Fiber scheduler. Blocking libraries that do not yield to the scheduler will still block the process.
+
+Timeouts are applied per event task. They are not whole-batch or
+whole-transaction deadlines.
 
 For CPU-bound processing, use `cdc-parallel`.
 
@@ -156,6 +167,10 @@ The benchmark focuses on three workload categories:
 
 See [benchmark/README.md](benchmark/README.md) for the full benchmark methodology,
 configuration reference, report schema, and interpretation guidance.
+
+`cdc-parallel` and `cdc-concurrent` benchmark different bottlenecks.
+`cdc-parallel` measures CPU parallelism; `cdc-concurrent` measures I/O wait
+overlap. Their speedup ratios are not directly comparable.
 
 ### Quick Start
 
