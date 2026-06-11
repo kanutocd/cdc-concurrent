@@ -18,8 +18,9 @@ module CDC
         # Async task fan-out runtime. It does not imply Ractor safety.
         #
         # @return [true] Always returns true after setting the declaration flag.
-        def concurrent_safe!
+        def concurrent_safe! # rubocop:disable Naming/PredicateMethod
           @concurrent_safe = true
+          true
         end
 
         # Reports whether the processor class declared concurrent_safe!.
