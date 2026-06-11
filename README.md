@@ -1,7 +1,7 @@
 # cdc-concurrent
 
-[![Gem Version](https://badge.fury.io/rb/cdc-conxurrent.svg)](https://badge.fury.io/rb/cdc-conxurrent)
-[![CI](https://github.com/kanutocd/cdc-conxurrent/workflows/CI/badge.svg)](https://github.com/kanutocd/cdc-concurrent/actions)
+[![Gem Version](https://badge.fury.io/rb/cdc-concurrent.svg)](https://badge.fury.io/rb/cdc-concurrent)
+[![CI](https://github.com/kanutocd/cdc-concurrent/workflows/CI/badge.svg)](https://github.com/kanutocd/cdc-concurrent/actions)
 [![Ruby Version](https://img.shields.io/badge/ruby-%3E%3D%203.4-ruby.svg)](https://www.ruby-lang.org/en/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
