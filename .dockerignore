@@ -1,0 +1,14 @@
+.bundle
+.git
+.github
+.ignoreme
+.yardoc
+coverage
+doc
+pkg
+tmp
+
+*.gem
+Gemfile.lock
+log
+node_modules

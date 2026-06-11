@@ -36,5 +36,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "async", "~> 2.0"
-  spec.add_dependency "cdc-core", "~> 0.1"
+  spec.add_dependency "cdc-core", "~> 0.1", ">= 0.1.3"
 end
