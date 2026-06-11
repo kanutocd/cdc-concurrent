@@ -1,5 +1,10 @@
 # cdc-concurrent
 
+[![Gem Version](https://badge.fury.io/rb/cdc-conxurrent.svg)](https://badge.fury.io/rb/cdc-conxurrent)
+[![CI](https://github.com/kanutocd/cdc-conxurrent/workflows/CI/badge.svg)](https://github.com/kanutocd/cdc-concurrent/actions)
+[![Ruby Version](https://img.shields.io/badge/ruby-%3E%3D%203.4-ruby.svg)](https://www.ruby-lang.org/en/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Optional I/O-concurrent runtime adapter for `cdc-core`.
 
 `cdc-concurrent` executes `CDC::Core::Processor` objects with Fiber-scheduler-based I/O concurrency using `async`. It is the I/O-bound twin of `cdc-parallel`.
@@ -233,4 +238,4 @@ locally, in CI, and across different development environments.
 
 ## License
 
-MIT.
+[MIT](LICENSE.txt)
