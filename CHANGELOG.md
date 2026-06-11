@@ -1,3 +1,24 @@
+## [0.1.1] - 2026-06-12
+
+  Tightened the type surface and switched the signatures over to the published
+  `cdc-core` 0.1.3 RBS files.
+
+  ### Added
+
+  - Published `cdc-core` RBS files are now loaded directly by Steep.
+  - `CDC::Concurrent` signatures are tighter around runtime, router, and pool
+    boundaries.
+
+  ### Changed
+
+  - Removed local RBS shims for `cdc-core` and `async`.
+  - Updated the gem dependency floor to `cdc-core >= 0.1.3`.
+
+  ### Fixed
+
+  - `TransactionPool` now handles failure results with a missing error value
+    defensively.
+
 ## [0.1.0] - 2026-06-04
 
   Initial release of `cdc-concurrent`.
