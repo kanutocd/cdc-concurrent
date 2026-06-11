@@ -4,11 +4,11 @@ module CDC
     class ResultCollector
       # @param value [Object]
       # @return [CDC::Core::ProcessorResult]
-      def self.normalize: (untyped value) -> untyped
+      def self.normalize: (untyped value) -> processor_result
 
       # @param error [Exception]
       # @return [CDC::Core::ProcessorResult]
-      def self.failure: (untyped error) -> untyped
+      def self.failure: (::Exception error) -> processor_result
     end
   end
 end

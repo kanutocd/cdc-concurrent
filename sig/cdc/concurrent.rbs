@@ -1,5 +1,12 @@
 module CDC
   # Optional concurrent runtime adapter for cdc-core processors.
   module Concurrent
+    type change_event = ::CDC::Core::ChangeEvent
+    type processor = ::CDC::Core::Processor
+    type processor_result = ::CDC::Core::ProcessorResult
+    type processor_results = ::Array[processor_result]
+    type transaction_envelope = ::CDC::Core::TransactionEnvelope
+    type work_item = change_event | transaction_envelope | ::Array[change_event]
+    type work_result = processor_result | processor_results
   end
 end

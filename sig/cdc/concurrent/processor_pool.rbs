@@ -2,42 +2,42 @@ module CDC
   module Concurrent
     # Executes one concurrent-safe processor using Async tasks.
     class ProcessorPool
-      @processor: untyped
+      @processor: processor
 
-      @configuration: untyped
+      @configuration: Configuration
 
-      @shutdown: untyped
+      @shutdown: bool
 
       # @param processor [CDC::Core::Processor]
       # @param concurrency [Integer]
       # @param timeout [Float, nil]
       # @param preserve_order [Boolean]
-      def initialize: (processor: untyped, ?concurrency: ::Integer, ?timeout: untyped?, ?preserve_order: bool) -> void
+      def initialize: (processor: processor, ?concurrency: ::Integer, ?timeout: ::Float?, ?preserve_order: bool) -> void
 
       # @param event [CDC::Core::ChangeEvent]
       # @return [CDC::Core::ProcessorResult]
-      def process: (untyped event) -> untyped
+      def process: (change_event event) -> processor_result
 
       # @param events [Array<CDC::Core::ChangeEvent>]
       # @return [Array<CDC::Core::ProcessorResult>]
-      def process_many: (untyped events) -> (::Array[untyped] | untyped)
+      def process_many: (::Array[change_event] events) -> processor_results
 
       # @return [void]
-      def shutdown: () -> untyped
+      def shutdown: () -> void
 
       private
 
-      def validate_processor!: (untyped processor) -> (nil | untyped)
+      def validate_processor!: (processor processor) -> nil
 
-      def empty_results: () -> ::Array[untyped]
+      def empty_results: () -> processor_results
 
-      def process_batch: (untyped events, untyped indexed_results) -> untyped
+      def process_batch: (::Array[change_event] events, ::Array[[::Integer, processor_result]] indexed_results) -> untyped
 
-      def process_one: (untyped event) -> untyped
+      def process_one: (change_event event) -> untyped
 
-      def process_with_task: (untyped task, untyped event) -> untyped
+      def process_with_task: (untyped task, change_event event) -> processor_result
 
-      def call_processor: (untyped task, untyped event) -> untyped
+      def call_processor: (untyped task, change_event event) -> untyped
     end
   end
 end

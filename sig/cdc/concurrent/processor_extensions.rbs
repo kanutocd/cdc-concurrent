@@ -1,26 +1,39 @@
 module CDC
+  module Core
+    class Processor
+      # Mark this processor class as safe for cdc-concurrent execution.
+      def self.concurrent_safe!: () -> true
+
+      # Whether this processor class declared concurrent safety.
+      def self.concurrent_safe?: () -> bool
+
+      # Whether this processor instance is concurrent-safe.
+      def concurrent_safe?: () -> bool
+    end
+  end
+
   # Optional concurrent runtime adapter for cdc-core processors.
   module Concurrent
     # Adds concurrent-safe declarations to CDC::Core::Processor subclasses.
     module ProcessorExtensions
       # Class methods added to CDC::Core::Processor.
       module ClassMethods
-        @concurrent_safe: untyped
+        @concurrent_safe: bool?
 
         # Declare this processor safe for concurrent execution.
-        def concurrent_safe!: () -> untyped
+        def concurrent_safe!: () -> true
 
         # @return [Boolean] whether instances are concurrent-safe.
-        def concurrent_safe?: () -> untyped
+        def concurrent_safe?: () -> bool
       end
 
       # @return [Boolean] whether this processor instance is concurrent-safe.
-      def concurrent_safe?: () -> untyped
+      def concurrent_safe?: () -> bool
     end
 
     # Installs concurrent-safe declarations on CDC::Core::Processor.
     #
     # @return [void]
-    def self.install_processor_extensions!: () -> untyped
+    def self.install_processor_extensions!: () -> void
   end
 end
